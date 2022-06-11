@@ -7,6 +7,7 @@ def checkFrequencies(B, A):
             return False
     return True
 
+
 class Solution:
     # Q1. Permutations of A in B
     # Problem Description
@@ -79,12 +80,12 @@ class Solution:
             return 0
         wipStr = ""
         if lenA > 1:
-            wipStr = B[0:lenA-1]
+            wipStr = B[0:lenA - 1]
         A = ''.join(sorted(A))
         # print("sorted small string ", A)
         hashVal = hash(A)
         count = 0
-        for i in range(lenA-1, lenB):
+        for i in range(lenA - 1, lenB):
             wipStr += B[i]
             substr = ''.join(sorted(wipStr))
             # print("for index", i, " substr ", substr)
@@ -103,16 +104,16 @@ class Solution:
             return 0
         for i in range(lenA):
             letterFreqA[ord(A[i]) - offsetVal] += 1
-            if i < lenA-1:
+            if i < lenA - 1:
                 letterFreqB[ord(B[i]) - offsetVal] += 1
         count = 0
-        for i in range(lenA-1, lenB):
+        for i in range(lenA - 1, lenB):
             letterFreqB[ord(B[i]) - offsetVal] += 1
             # check for frequencies match
             if checkFrequencies(letterFreqB, letterFreqA):
                 count += 1
             # print ("val to be deleted : ", i-lenA+1, B[i-lenA+1])
-            letterFreqB[ord(B[i-lenA+1]) - offsetVal] -= 1
+            letterFreqB[ord(B[i - lenA + 1]) - offsetVal] -= 1
         return count
 
     # Q2. Valid Sudoku
@@ -130,57 +131,52 @@ class Solution:
     # Return 0 / 1 ( 0 for false, 1 for true ) for this problem
     # @param A : tuple of strings
     # @return an integer
-    def isValidSudoku(self, matrix):
+    def isValidSudoku(self, A):
         # validate rows
         # validate columns
         # validate boxes - 3x3 matrices
-
-        A = map(char, matrix.split())
-        sudokuSize = int(A[0])
-        # A = [[0 for i in range(sudokuSize)] for i in range(sudokuSize)]
-        # A = matrix
-        print("val:", A, len(A))
-        print (sudokuSize)
-
+        sudokuSize = len(A)
         # for i in range(sudokuSize):
         #     for j in range(sudokuSize):
         #         print(A[i][j]),
         #     print()
         # if len(A) != sudokuSize:
         #     return False
-        # # rows
-        # for i in range(sudokuSize):
-        #     hashVals = [0 for i in range(9)]
-        #     for j in range(sudokuSize):
-        #         if A[i][j] == '.':
-        #             continue
-        #         hashVals[int(A[i][j])] += 1
-        #         if hashVals[int(A[i][j])] > 1:
-        #             return False
-        # # columns
-        # for i in range(sudokuSize):
-        #     hashVals = [0 for i in range(9)]
-        #     for j in range(sudokuSize):
-        #         if A[i][j] == '.':
-        #             continue
-        #         hashVals[int(A[j][i])] += 1
-        #         if hashVals[int(A[j][i])] > 1:
-        #             return False
-        # boxStartIndices = [[0,0], [0,3], [0,6], [3,0], [3,3], [3,6], [6,0], [6,3], [6,6]]
-        # for box in range(len(boxStartIndices)):
-        #     hashVals = [0 for i in range(9)]
-        #     for i in range(3):
-        #         for j in range(3):
-        #             xVal = boxStartIndices[box][0] + i
-        #             yVal = boxStartIndices[box][1] + j
-        #             if A[xVal][yVal] == '.':
-        #                 continue
-        #             hashVals[int(A[xVal][yVal])] += 1
-        #             if hashVals[int(A[xVal][yVal])] > 1:
-        #                 return False
-        # return True
-
-
+        # rows
+        for i in range(sudokuSize):
+            hashVals = {}
+            for j in range(sudokuSize):
+                if A[i][j] == '.':
+                    continue
+                if A[i][j] in hashVals.keys():
+                    return 0
+                if '0' <= A[i][j] <= '9':
+                    hashVals[A[i][j]] = 1
+            # print("for row", i, hashVals)
+        # columns
+        for i in range(sudokuSize):
+            hashVals = {}
+            for j in range(sudokuSize):
+                if A[j][i] == '.':
+                    continue
+                if A[j][i] in hashVals.keys():
+                    return 0
+                if '0' <= A[j][i] <= '9':
+                    hashVals[A[j][i]] = 1
+            # print("for column", i, hashVals)
+        boxStartIndices = [[0,0], [0,3], [0,6], [3,0], [3,3], [3,6], [6,0], [6,3], [6,6]]
+        for box in range(len(boxStartIndices)):
+            hashVals = {}
+            for i in range(3):
+                for j in range(3):
+                    xVal = boxStartIndices[box][0] + i
+                    yVal = boxStartIndices[box][1] + j
+                    if A[xVal][yVal] == '.':
+                        continue
+                    if A[xVal][yVal] in hashVals.keys():
+                        return False
+                    hashVals[A[xVal][yVal]] = 1
+        return 1
 
 
 A = "p"
@@ -192,11 +188,11 @@ B1 = "qaoedpcebeaqocbacoccqoebpqdoqcpbdbqcecdoqcpebqpebbabqdpepcpbqbepbabocpc"
 A2 = "abc"
 B2 = "abcbacabc"
 
-
-
 sol = Solution()
 # print(sol.perms2(A2, B2))
 
 # A3 = [ "....5..1.", ".4.3.....", ".....3..1", "8......2.", "..2.7....", ".15......", ".....2...", ".2.9.....", "..4......" ]
-A3 = "9 ....5..1. .4.3..... .....3..1 8......2. ..2.7.... .15...... .....2... .2.9..... ..4......"
+# A3 = "9 ....5..1. .4.3..... .....3..1 8......2. ..2.7.... .15...... .....2... .2.9..... ..4......"
+A3 = ["53..7....", "6..195...", ".98....6.", "8...6...3", "4..8.3..1", "7...2...6", ".6....28.", "...419..5",
+      "....8..79"]
 print (sol.isValidSudoku(A3))
